@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express'
+import { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
 import { logger } from '../utils/logger'
 
 export interface AppError extends Error {
@@ -6,18 +6,14 @@ export interface AppError extends Error {
   isOperational?: boolean
 }
 
-export const errorHandler = (
-  err: AppError,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const statusCode = err.statusCode || 500
-  const message = err.message || 'Internal Server Error'
+export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  const appError = err as AppError
+  const statusCode = appError.statusCode || 500
+  const message = appError.message || 'Internal Server Error'
 
   logger.error({
-    message: err.message,
-    stack: err.stack,
+    message: appError.message,
+    stack: appError.stack,
     statusCode,
     url: req.url,
     method: req.method,
@@ -29,7 +25,7 @@ export const errorHandler = (
   res.status(statusCode).json({
     error: {
       message,
-      ...(isDevelopment && { stack: err.stack }),
+      ...(isDevelopment && { stack: appError.stack }),
     },
   })
 }
