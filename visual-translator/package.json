@@ -1,0 +1,26 @@
+{
+  "name": "visual-translator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered sign language translation for video content",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean",
+    "install:all": "npm install && npm run install:packages",
+    "install:packages": "cd apps/web && npm install && cd ../api && npm install"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "turbo": "^1.10.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

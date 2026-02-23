@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  # Frontend React app
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+      - REACT_APP_WS_URL=ws://localhost:5000
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    networks:
+      - visual-translator-network
+
+  # Backend API
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - REDIS_URL=redis://redis:6379
+      - UPLOAD_DIR=/app/uploads
+      - AI_SERVICE_URL=http://ai-service:8000
+    volumes:
+      - ./apps/api:/app
+      - /app/node_modules
+      - uploads:/app/uploads
+    depends_on:
+      - redis
+      - ai-service
+    networks:
+      - visual-translator-network
+
+  # AI Service (Python)
+  ai-service:
+    build:
+      context: ./packages/ai-service
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CUDA_VISIBLE_DEVICES=0
+    volumes:
+      - ai-models:/app/models
+      - ./packages/ai-service:/app
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    networks:
+      - visual-translator-network
+
+  # Redis for caching and job queue
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - visual-translator-network
+
+volumes:
+  uploads:
+  ai-models:
+  redis-data:
+
+networks:
+  visual-translator-network:
+    driver: bridge
