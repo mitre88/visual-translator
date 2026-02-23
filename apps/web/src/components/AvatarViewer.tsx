@@ -1,4 +1,4 @@
-import { useRef, useMemo, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Grid, Text } from '@react-three/drei'
 import * as THREE from 'three'
@@ -192,8 +192,7 @@ interface AvatarViewerProps {
 }
 
 export default function AvatarViewer({ 
-  isActive = false,
-  translationData 
+  isActive = false
 }: AvatarViewerProps) {
   return (
     <div className="w-full h-full">

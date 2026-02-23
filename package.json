@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
+    "build:web": "turbo run build --filter=@visual-translator/web",
     "start": "turbo run start",
     "lint": "turbo run lint",
     "test": "turbo run test",
@@ -17,7 +18,7 @@
     "apps/*",
     "packages/*"
   ],
-  "devDependencies": {
+  "dependencies": {
     "turbo": "^1.10.0"
   },
   "engines": {

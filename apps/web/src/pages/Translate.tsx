@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { FaCloudUploadAlt, FaVideo, FaWebcam, FaSpinner } from 'react-icons/fa'
+import { FaCloudUploadAlt, FaVideo, FaCamera, FaSpinner } from 'react-icons/fa'
 import toast from 'react-hot-toast'
 import VideoPlayer from '../components/VideoPlayer'
 import AvatarViewer from '../components/AvatarViewer'
@@ -142,7 +142,7 @@ export default function Translate() {
               >
                 <div className="flex flex-col items-center">
                   <div className="w-20 h-20 mb-4 bg-primary-50 rounded-full flex items-center justify-center">
-                    <FaWebcam className="w-10 h-10 text-primary-600" />
+                    <FaCamera className="w-10 h-10 text-primary-600" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Use Webcam</h3>
                   <p className="text-gray-500 max-w-sm">
