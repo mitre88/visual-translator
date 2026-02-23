@@ -8,7 +8,7 @@ import { asyncHandler, createError } from '../middleware/errorHandler'
 import { logger } from '../utils/logger'
 import { TranslationJob, TranslationStatus } from '../services/translation'
 
-const router = Router()
+const router: Router = Router()
 
 // Ensure uploads directory exists
 const uploadsDir = process.env.UPLOAD_DIR || './uploads'

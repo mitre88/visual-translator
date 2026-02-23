@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { logger } from '../utils/logger'
 
-const router = Router()
+const router: Router = Router()
 
 interface HealthStatus {
   status: 'healthy' | 'degraded' | 'unhealthy'
@@ -33,7 +33,11 @@ router.get('/', async (req, res) => {
   
   // Check all services
   const allHealthy = Object.values(healthStatus.services).every(Boolean)
-  healthStatus.status = allHealthy ? 'healthy' : 'degraded'
+  if (!healthStatus.services.api) {
+    healthStatus.status = 'unhealthy'
+  } else {
+    healthStatus.status = allHealthy ? 'healthy' : 'degraded'
+  }
 
   const statusCode = healthStatus.status === 'unhealthy' ? 503 : 200
   res.status(statusCode).json(healthStatus)

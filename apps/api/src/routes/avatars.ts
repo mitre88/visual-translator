@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { asyncHandler, createError } from '../middleware/errorHandler'
 
-const router = Router()
+const router: Router = Router()
 
 // Available avatars
 const avatars = [
