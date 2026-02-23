@@ -71,7 +71,7 @@ const translationJobs = new Map<string, TranslationJob>()
 router.post(
   '/upload',
   upload.single('video'),
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: Request, res: Response) => {
     if (!req.file) {
       throw createError('No video file provided', 400)
     }
@@ -94,7 +94,7 @@ router.post(
 // Start translation
 router.post(
   '/:videoId/translate',
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: Request<{ videoId: string }>, res: Response) => {
     const { videoId } = req.params
     const { sourceLanguage = 'en', targetSignLanguage = 'asl' } = req.body
 
