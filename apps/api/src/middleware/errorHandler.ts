@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { logger } from '../utils/logger'
 
 export interface AppError extends Error {
@@ -34,8 +34,14 @@ export const errorHandler = (
   })
 }
 
-export const asyncHandler = (fn: Function) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+type AsyncRequestHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => Promise<unknown> | unknown
+
+export const asyncHandler = (fn: AsyncRequestHandler): RequestHandler => {
+  return (req, res, next) => {
     Promise.resolve(fn(req, res, next)).catch(next)
   }
 }

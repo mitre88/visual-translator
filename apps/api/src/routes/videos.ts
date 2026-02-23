@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express'
+import { Router } from 'express'
 import multer from 'multer'
 import { v4 as uuidv4 } from 'uuid'
 import { join } from 'path'
@@ -71,7 +71,7 @@ const translationJobs = new Map<string, TranslationJob>()
 router.post(
   '/upload',
   upload.single('video'),
-  asyncHandler(async (req: Request, res: Response) => {
+  asyncHandler(async (req, res) => {
     if (!req.file) {
       throw createError('No video file provided', 400)
     }
@@ -94,7 +94,7 @@ router.post(
 // Start translation
 router.post(
   '/:videoId/translate',
-  asyncHandler(async (req: Request<{ videoId: string }>, res: Response) => {
+  asyncHandler(async (req, res) => {
     const { videoId } = req.params
     const { sourceLanguage = 'en', targetSignLanguage = 'asl' } = req.body
 
@@ -137,7 +137,7 @@ router.post(
 // Get translation status
 router.get(
   '/:videoId/status',
-  asyncHandler(async (req: Request<{ videoId: string }>, res: Response) => {
+  asyncHandler(async (req, res) => {
     const { videoId } = req.params
     const job = translationJobs.get(videoId)
 
@@ -159,7 +159,7 @@ router.get(
 // Get translation result
 router.get(
   '/:videoId/result',
-  asyncHandler(async (req: Request<{ videoId: string }>, res: Response) => {
+  asyncHandler(async (req, res) => {
     const { videoId } = req.params
     const job = translationJobs.get(videoId)
 
