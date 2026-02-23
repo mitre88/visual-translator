@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Request, Response, Router } from 'express'
 import multer from 'multer'
 import { v4 as uuidv4 } from 'uuid'
 import { join } from 'path'
@@ -137,7 +137,7 @@ router.post(
 // Get translation status
 router.get(
   '/:videoId/status',
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: Request<{ videoId: string }>, res: Response) => {
     const { videoId } = req.params
     const job = translationJobs.get(videoId)
 
@@ -159,7 +159,7 @@ router.get(
 // Get translation result
 router.get(
   '/:videoId/result',
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: Request<{ videoId: string }>, res: Response) => {
     const { videoId } = req.params
     const job = translationJobs.get(videoId)
 
