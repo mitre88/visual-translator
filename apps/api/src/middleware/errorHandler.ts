@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } from 'express'
 import { logger } from '../utils/logger'
 
 export interface AppError extends Error {
@@ -6,7 +6,7 @@ export interface AppError extends Error {
   isOperational?: boolean
 }
 
-export const errorHandler = (
+export const errorHandler: ErrorRequestHandler = (
   err: AppError,
   req: Request,
   res: Response,
