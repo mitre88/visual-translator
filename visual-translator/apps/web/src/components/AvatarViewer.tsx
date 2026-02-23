@@ -109,7 +109,7 @@ function Body() {
       {/* Head */}
       <mesh position={[0, 2.2, 0]}>
         <sphereGeometry args={[0.25, 32, 32]} />
-        <mathStandardMaterial color="#FDBA74" />
+        <meshStandardMaterial color="#FDBA74" />
       </mesh>
 
       {/* Neck */}

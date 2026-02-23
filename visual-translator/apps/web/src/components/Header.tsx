@@ -50,6 +50,16 @@ export default function Header() {
             })}
           </nav>
 
+          {/* Status + Avatar */}
+          <div className="hidden md:flex items-center gap-3">
+            <div className="px-3 py-1 rounded-full text-xs font-medium text-gray-600 bg-gray-100 border border-gray-200">
+              Enterprise Workspace
+            </div>
+            <div className="h-9 w-9 rounded-full border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center text-sm font-semibold text-gray-600">
+              VT
+            </div>
+          </div>
+
           {/* Mobile menu button */}
           <button
             className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"

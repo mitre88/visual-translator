@@ -9,6 +9,27 @@ import { uploadVideo, startTranslation } from '../services/api'
 
 type TranslationState = 'idle' | 'uploading' | 'processing' | 'translating' | 'complete' | 'error'
 
+const avatarPresets = [
+  {
+    name: 'Avery',
+    role: 'Executive',
+    tone: 'Neutral, formal cadence',
+    initials: 'AV',
+  },
+  {
+    name: 'Jordan',
+    role: 'Client Success',
+    tone: 'Warm and approachable',
+    initials: 'JR',
+  },
+  {
+    name: 'Quinn',
+    role: 'Product Specialist',
+    tone: 'Precise, instructional',
+    initials: 'QN',
+  },
+]
+
 export default function Translate() {
   const [videoUrl, setVideoUrl] = useState<string | null>(null)
   const [videoFile, setVideoFile] = useState<File | null>(null)
@@ -91,44 +112,87 @@ export default function Translate() {
 
         {/* Input Selection */}
         {!videoUrl && !useWebcam && (
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            {/* File Upload */}
-            <div
-              {...getRootProps()}
-              className={`dropzone ${isDragActive ? 'dropzone--active' : ''}`}
-            >
-              <input {...getInputProps()} />
-              <div className="flex flex-col items-center">
-                <div className="w-20 h-20 mb-4 bg-primary-50 rounded-full flex items-center justify-center">
-                  <FaCloudUploadAlt className="w-10 h-10 text-primary-600" />
+          <div className="grid lg:grid-cols-[2fr,1fr] gap-6 mb-10">
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* File Upload */}
+              <div
+                {...getRootProps()}
+                className={`dropzone ${isDragActive ? 'dropzone--active' : ''}`}
+              >
+                <input {...getInputProps()} />
+                <div className="flex flex-col items-center">
+                  <div className="w-20 h-20 mb-4 bg-primary-50 rounded-full flex items-center justify-center">
+                    <FaCloudUploadAlt className="w-10 h-10 text-primary-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Upload Video</h3>
+                  <p className="text-gray-500 max-w-sm">
+                    {isDragActive 
+                      ? 'Drop the video here...' 
+                      : 'Drag and drop a video file, or click to browse'
+                    }
+                  </p>
+                  <p className="text-sm text-gray-400 mt-4">Supported: MP4, WebM, MOV, AVI</p>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Upload Video</h3>
-                <p className="text-gray-500 max-w-sm">
-                  {isDragActive 
-                    ? 'Drop the video here...' 
-                    : 'Drag and drop a video file, or click to browse'
-                  }
-                </p>
-                <p className="text-sm text-gray-400 mt-4">Supported: MP4, WebM, MOV, AVI</p>
               </div>
+
+              {/* Webcam */}
+              <button
+                onClick={enableWebcam}
+                className="dropzone hover:bg-primary-50"
+              >
+                <div className="flex flex-col items-center">
+                  <div className="w-20 h-20 mb-4 bg-primary-50 rounded-full flex items-center justify-center">
+                    <FaWebcam className="w-10 h-10 text-primary-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Use Webcam</h3>
+                  <p className="text-gray-500 max-w-sm">
+                    Translate in real-time using your webcam
+                  </p>
+                  <p className="text-sm text-gray-400 mt-4">Requires camera and microphone access</p>
+                </div>
+              </button>
             </div>
 
-            {/* Webcam */}
-            <button
-              onClick={enableWebcam}
-              className="dropzone hover:bg-primary-50"
-            >
-              <div className="flex flex-col items-center">
-                <div className="w-20 h-20 mb-4 bg-primary-50 rounded-full flex items-center justify-center">
-                  <FaWebcam className="w-10 h-10 text-primary-600" />
+            <div className="card">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Avatar Library</h3>
+                  <p className="text-sm text-gray-500">Enterprise-ready avatar placeholders for early previews.</p>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Use Webcam</h3>
-                <p className="text-gray-500 max-w-sm">
-                  Translate in real-time using your webcam
-                </p>
-                <p className="text-sm text-gray-400 mt-4">Requires camera and microphone access</p>
+                <span className="text-xs font-semibold text-primary-700 bg-primary-50 px-2 py-1 rounded-full">
+                  Placeholder
+                </span>
               </div>
-            </button>
+
+              <div className="mt-4 space-y-3">
+                {avatarPresets.map((avatar) => (
+                  <button
+                    key={avatar.name}
+                    className="w-full flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 text-left
+                               hover:border-primary-300 hover:bg-primary-50/40 transition-colors"
+                    type="button"
+                  >
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary-50 to-primary-200
+                                    border border-primary-100 flex items-center justify-center text-sm font-semibold text-primary-700">
+                      {avatar.initials}
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm font-semibold text-gray-900">{avatar.name}</div>
+                      <div className="text-xs text-gray-500">{avatar.role}</div>
+                      <div className="text-xs text-gray-400 mt-1">{avatar.tone}</div>
+                    </div>
+                    <div className="text-xs text-gray-400">Preview</div>
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-6 rounded-xl border border-dashed border-gray-200 bg-gray-50 p-4">
+                <div className="text-xs font-semibold uppercase tracking-wide text-gray-400">Production Ready</div>
+                <p className="text-sm text-gray-600 mt-2">
+                  High-fidelity avatar renders appear here after model sync and compliance review.
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
@@ -209,6 +273,30 @@ export default function Translate() {
                     </div>
                   </div>
                 )}
+
+                <div className="mt-6">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                      Avatar Placeholders
+                    </span>
+                    <span className="text-xs text-gray-400">Preview only</span>
+                  </div>
+                  <div className="mt-3 grid grid-cols-2 gap-3">
+                    {avatarPresets.map((avatar) => (
+                      <div
+                        key={`${avatar.name}-thumb`}
+                        className="rounded-xl border border-gray-200 bg-gray-50 p-3"
+                      >
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary-50 to-primary-200
+                                        border border-primary-100 flex items-center justify-center text-xs font-semibold text-primary-700">
+                          {avatar.initials}
+                        </div>
+                        <div className="mt-2 text-xs font-semibold text-gray-700">{avatar.name}</div>
+                        <div className="text-[11px] text-gray-400">{avatar.role}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
