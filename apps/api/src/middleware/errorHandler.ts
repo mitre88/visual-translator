@@ -1,4 +1,4 @@
-import { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { logger } from '../utils/logger'
 
 export interface AppError extends Error {
@@ -6,7 +6,7 @@ export interface AppError extends Error {
   isOperational?: boolean
 }
 
-export const errorHandler: ErrorRequestHandler = (
+export const errorHandler = (
   err: AppError,
   req: Request,
   res: Response,
@@ -40,8 +40,8 @@ type AsyncRequestHandler = (
   next: NextFunction
 ) => Promise<unknown> | unknown
 
-export const asyncHandler = (fn: AsyncRequestHandler): RequestHandler => {
-  return (req, res, next) => {
+export const asyncHandler = (fn: AsyncRequestHandler) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     Promise.resolve(fn(req, res, next)).catch(next)
   }
 }
