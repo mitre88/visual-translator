@@ -52,7 +52,7 @@ const upload = multer({
     fileSize: 500 * 1024 * 1024, // 500MB limit
   },
 })
-const uploadVideoHandler = upload.single('video') as RequestHandler
+const uploadVideoHandler = upload.single('video') as never as RequestHandler
 
 function getExtension(mimetype: string): string {
   const map: Record<string, string> = {
