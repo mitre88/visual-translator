@@ -11,7 +11,9 @@ import { TranslationJob, TranslationStatus } from '../services/translation'
 const router: Router = Router()
 
 // Ensure uploads directory exists
-const uploadsDir = process.env.UPLOAD_DIR || './uploads'
+const isServerlessRuntime =
+  process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined
+const uploadsDir = process.env.UPLOAD_DIR || (isServerlessRuntime ? '/tmp/uploads' : './uploads')
 if (!existsSync(uploadsDir)) {
   mkdirSync(uploadsDir, { recursive: true })
 }
