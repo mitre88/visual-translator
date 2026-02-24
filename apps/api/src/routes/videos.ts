@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { RequestHandler, Router } from 'express'
 import multer from 'multer'
 import { v4 as uuidv4 } from 'uuid'
 import { join } from 'path'
@@ -52,6 +52,7 @@ const upload = multer({
     fileSize: 500 * 1024 * 1024, // 500MB limit
   },
 })
+const uploadVideoHandler = upload.single('video') as RequestHandler
 
 function getExtension(mimetype: string): string {
   const map: Record<string, string> = {
@@ -70,7 +71,7 @@ const translationJobs = new Map<string, TranslationJob>()
 // Upload video
 router.post(
   '/upload',
-  upload.single('video'),
+  uploadVideoHandler,
   asyncHandler(async (req, res) => {
     if (!req.file) {
       throw createError('No video file provided', 400)
